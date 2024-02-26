@@ -16,7 +16,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int index = 0;
-  List<Widget> screens = [Leading(), Menu(), Events(), Profile()];
+  List<Widget> screens = [
+    const Leading(),
+    const Menu(),
+    const Events(),
+    const Profile()
+  ];
 
   updateScreen(int _index) {
     setState(() {
@@ -28,7 +33,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: GNav(
           style: GnavStyle.google,
           onTabChange: updateScreen,
@@ -39,11 +44,7 @@ class _HomeState extends State<Home> {
           gap: 8,
           padding: const EdgeInsets.all(16),
           tabs: const [
-            GButton(
-              textColor: Colors.white,
-              icon: Icons.home,
-              text: "Home",
-            ),
+            GButton(textColor: Colors.white, icon: Icons.home, text: "Home"),
             GButton(icon: Icons.coffee, text: "Menu"),
             GButton(icon: Icons.event, text: "Events"),
             GButton(icon: Icons.person, text: "Profile"),
