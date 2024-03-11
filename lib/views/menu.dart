@@ -12,6 +12,26 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // navigate to  add menu page
+          //add menu page content:
+          /// category drop down menu {coffee, wtaer , food }
+          /// name
+          /// price
+          /// add button
+          ///
+          /// add event
+          /// event name:
+          /// number places
+          /// date time
+          /// type {wedding , party ...} drop dow, menu
+          /// add button
+          ///
+          ///
+        },
+        child: Icon(Icons.add),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SingleChildScrollView(

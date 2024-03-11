@@ -14,3 +14,4 @@ const String image4 =
     "https://media-cdn.tripadvisor.com/media/photo-p/14/ef/d4/21/pep-slice.jpg";
 const String user =
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+const String coffe = "https://clipart-library.com/img/1695731.png";
