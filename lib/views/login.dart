@@ -92,7 +92,7 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.all(15),
                 ),
                 child: const Text(
-                  "Déconnexion",
+                  "Login",
                   style: TextStyle(color: Color.fromARGB(255, 33, 211, 235)),
                 ),
               ),

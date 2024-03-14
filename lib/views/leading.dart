@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oasis_app/views/add_event.dart';
 import 'package:oasis_app/views/add_table.dart';
+import 'package:oasis_app/views/login.dart';
 
 import '../core/consts.dart';
 
@@ -27,8 +29,13 @@ class _LeadingState extends State<Leading> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => AddEvent()));
+                            if (FirebaseAuth.instance.currentUser == null) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Login()));
+                            } else {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => AddEvent()));
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.blue,
@@ -36,7 +43,8 @@ class _LeadingState extends State<Leading> {
                           ),
                           child: const Text(
                             "Event",
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 219, 14, 14)),
                           ),
                         ),
                         SizedBox(
@@ -53,7 +61,8 @@ class _LeadingState extends State<Leading> {
                           ),
                           child: const Text(
                             "Table",
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 219, 14, 14)),
                           ),
                         ),
                       ],

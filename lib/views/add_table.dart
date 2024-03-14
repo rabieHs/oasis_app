@@ -5,64 +5,56 @@ import 'package:oasis_app/core/consts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class AddTable extends StatefulWidget {
-  const AddTable({super.key});
+  const AddTable({Key? key}) : super(key: key);
 
   @override
-  State<AddTable> createState() => _AddTableState();
+  _AddTableState createState() => _AddTableState();
 }
 
 class _AddTableState extends State<AddTable> {
-  DateTime today = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
+  //Create datetime variable
+  DateTime _dateTime = DateTime.now();
+
+  // show date picker method
+
+  void _ShowDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    ).then((value) {
+      setState(() {
+        _dateTime = value!;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryColors,
-        title: Text("Add Table"),
-      ),
-      body: content(),
-    );
-  }
+        body: Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          // display chosen date
+          Text(_dateTime.toString(), style: TextStyle(fontSize: 30)),
 
-  content() {
-    return Column(
-      children: [
-        Text(
-          "Date",
-          textAlign: TextAlign.right,
-          style: TextStyle(color: Colors.blue),
-        ),
-        Container(
-          child: TableCalendar(
-              focusedDay: today,
-              firstDay: DateTime.utc(2015, 10, 01),
-              lastDay: DateTime.utc(2050, 10, 01)),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Time"),
-            Text("${selectedTime.hour}:${selectedTime.minute}"),
-            ElevatedButton(
-              onPressed: () async {
-                final TimeOfDay? timeOfDay = await showTimePicker(
-                  context: context,
-                  initialTime: selectedTime,
-                  initialEntryMode: TimePickerEntryMode.dial,
-                );
-                if (timeOfDay != null) {
-                  setState(() {
-                    selectedTime = timeOfDay;
-                  });
-                }
-              },
-              child: const Text("choose time"),
-            )
-          ],
-        )
-      ],
-    );
+          //button
+          MaterialButton(
+            onPressed: _ShowDatePicker,
+            child: const Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text('choose Date',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 184, 42, 42),
+                    fontSize: 25,
+                  )),
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 }

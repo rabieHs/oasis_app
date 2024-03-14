@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oasis_app/core/consts.dart';
+import 'package:oasis_app/views/add_categories.dart';
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -14,6 +15,8 @@ class _MenuState extends State<Menu> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => DropdownMenuApp()));
           // navigate to  add menu page
           //add menu page content:
           /// category drop down menu {coffee, wtaer , food }
