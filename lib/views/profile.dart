@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:oasis_app/core/consts.dart';
+import 'package:oasis_app/views/my_events.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -39,7 +40,10 @@ class _ProfileState extends State<Profile> {
             SizedBox(
               width: double.maxFinite,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => my_events()));
+                },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.blue,
                   padding: const EdgeInsets.all(15),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oasis_app/services/events.dart';
 import '../core/consts.dart';
@@ -11,11 +12,7 @@ class Events extends StatefulWidget {
 }
 
 class _EventsState extends State<Events> {
-  @override
-  void initState() {
-    super.initState();
-    EventsServices().getEvents().then((value) => print(value));
-  }
+  final uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -87,9 +84,15 @@ class _EventsState extends State<Events> {
                   height: 10,
                 ),
                 StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('events')
-                        .snapshots(),
+                    stream: uid == adminId
+                        ? FirebaseFirestore.instance
+                            .collection('events')
+                            .snapshots()
+                        : FirebaseFirestore.instance
+                            .collection('events')
+                            .where("confidentialite", isEqualTo: "public")
+                            .where("status", isEqualTo: "accepte")
+                            .snapshots(),
                     builder: (context, result) {
                       if (result.hasError) {
                         print(result.error);
@@ -111,6 +114,90 @@ class _EventsState extends State<Events> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
+                                  showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            title: const Text(
+                                                'demande de creation dune evenements'),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text("nom: "),
+                                                    Text(events[index]
+                                                        ["event_name"]),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                        "nom de l'utilisateur: "),
+                                                    Text(events[index]
+                                                        ["user-name"]),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            actions: uid != adminId
+                                                ? <Widget>[
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'events')
+                                                            .doc(events[index]
+                                                                ["event_id"])
+                                                            .update({
+                                                          "status": "refuse"
+                                                        });
+                                                      },
+                                                      child:
+                                                          const Text('Refuser'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'events')
+                                                            .doc(events[index]
+                                                                ["event_id"])
+                                                            .update({
+                                                          "status": "accepte"
+                                                        });
+                                                      },
+                                                      child: const Text(
+                                                          'Accepter'),
+                                                    ),
+                                                  ]
+                                                : <Widget>[
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child:
+                                                          const Text('Exist'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'events')
+                                                            .doc(events[index]
+                                                                ["event_id"])
+                                                            .update({
+                                                          "participants": [uid]
+                                                        });
+                                                      },
+                                                      child: const Text(
+                                                          'Participer'),
+                                                    ),
+                                                  ],
+                                          ));
                                   //// alertDialog + Home
                                   ///title : Text("demande de creation dune even")
                                   ///==> content: event details : titre , type , nom user , time date :
@@ -162,8 +249,14 @@ class _EventsState extends State<Events> {
                                                 ),
                                               ],
                                             ),
-                                            Text(events[index]["time"]),
-                                            Text(events[index]["number"]),
+                                            Row(children: [
+                                              Text("Time: "),
+                                              Text(events[index]["time"])
+                                            ]),
+                                            Row(children: [
+                                              Text("Les Participants: "),
+                                              Text(events[index]["number"])
+                                            ]),
                                           ],
                                         )
                                       ],

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:uuid/uuid.dart';
 
 class AddEvent extends StatefulWidget {
   AddEvent({super.key});
@@ -13,6 +14,7 @@ class AddEvent extends StatefulWidget {
 }
 
 class _AddEventState extends State<AddEvent> {
+  String? selectedType;
   String? selectedValue;
   final nameController = TextEditingController();
   final usernameController = TextEditingController();
@@ -66,6 +68,45 @@ class _AddEventState extends State<AddEvent> {
                         ),
                       ),
                       items: items
+                          .map((String item) => DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(
+                                  item,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                      value: selectedType,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedType = value;
+                        });
+                      },
+                      buttonStyleData: const ButtonStyleData(
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        height: 40,
+                        width: 500,
+                      ),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                      ),
+                    )),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                    DropdownButtonHideUnderline(
+                        child: DropdownButton2<String>(
+                      isExpanded: true,
+                      hint: Text(
+                        'Accessible',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                      items: item
                           .map((String item) => DropdownMenuItem<String>(
                                 value: item,
                                 child: Text(
@@ -186,26 +227,28 @@ class _AddEventState extends State<AddEvent> {
                                 FirebaseAuth.instance.currentUser!.uid;
                             final userName = usernameController.text;
                             final name = nameController.text;
-                            final type = selectedValue;
                             final date = dateController.text;
                             final time = timeController.text;
                             final nbr = nbplacesController.text;
                             final contact = contactController.text;
                             final moreInfo = otherController.text;
-
+                            final event_id = Uuid().v4();
                             await FirebaseFirestore.instance
                                 .collection('events')
-                                .doc()
+                                .doc(event_id)
                                 .set({
+                              "confidentialite": selectedValue,
+                              "event_id": event_id,
                               "user_id": userId,
                               "user-name": userName,
                               "event_name": name,
-                              "type": type,
+                              "type": selectedType,
                               "date": date,
                               "time": time,
                               "number": nbr,
                               "contact": contact,
-                              "more_info": moreInfo
+                              "more_info": moreInfo,
+                              "status": "en attente"
                             }).whenComplete(() {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
@@ -230,3 +273,8 @@ final List<String> items = [
   'party',
 ];
 List<String> selectedValue = [];
+final List<String> item = [
+  'public',
+  'private',
+];
+List<String> selectedItem = [];

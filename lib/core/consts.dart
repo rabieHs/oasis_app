@@ -15,3 +15,5 @@ const String image4 =
 const String user =
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
 const String coffe = "https://clipart-library.com/img/1695731.png";
+
+const String adminId = "KO2Ll5kUoyelKy3EryvolOdlxUR2";

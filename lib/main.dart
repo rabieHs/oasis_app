@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:oasis_app/firebase_options.dart';
 import 'package:oasis_app/views/add_categories.dart';
 import 'package:oasis_app/views/add_event.dart';
-import 'package:oasis_app/views/categories.dart';
+import 'package:oasis_app/views/my_events.dart';
 import 'package:oasis_app/views/login.dart';
 import 'package:oasis_app/views/sign_up.dart';
 
